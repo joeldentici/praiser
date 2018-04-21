@@ -240,7 +240,7 @@ exposes itself to the compiled templates:
 
 =head3 Arguments
 
-Your Praiser templates take 3 parameters in their compile form:
+Your Praiser templates take 3 parameters in their compiled form:
 
 	$output # The subroutine that outputs HTML/text
 	$include # The subroutine that allows including another template
@@ -256,7 +256,7 @@ parameter. You can also pass new $args with include:
 	@$include->('template.plhtml', {x => 5})
 
 In this case, the included template will receive the arguments you pass to it instead of the
-arguments ot the template it was included from.
+arguments to the template it was included from.
 
 =head1 CAVEATS
 
