@@ -85,6 +85,7 @@ sub loadFile {
 Praiser - Praiser template engine for Perl
 
 =head1 SYNOPSIS
+=for highlighter language=perl
 
 	use Praiser;
 	my $praiser = Praiser->new({
