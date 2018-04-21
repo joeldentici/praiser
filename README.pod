@@ -28,6 +28,107 @@ Praiser gives you the full power of Perl inside your templates.
 It's minimal design is cleaner than similar projects like Template::ToolKit and Mason.
 It is also much less verbose to use.
 
+=head2 Templates
+
+Praiser templates allow you to easily transition between Perl and HTML. Here is an example template that
+shows a greeting message with the current date:
+
+	@{
+		use POSIX qw(strftime);
+		my $date = strftime "%m/%d/%Y", localtime;
+	}
+
+	@{ my $greeting = "Welcome to Praiser!"; }
+	@{
+		my $message = $greeting . ' ' . "Today is $date";
+	}
+	<p>@$message</p>
+
+When Praiser processes this template, it produces:
+
+	<p>Welcome to Praiser! Today is [MM/DD/YY]<p>
+
+You can also pass arguments to templates. Here is how you use arguments:
+
+	@{
+		my $name = $args->{name};
+	}
+
+	<p>Hello @$name</p>
+
+If you are creating complicated templates, you will probably want to break them up.
+You can include other templates anywhere inside a template:
+
+	@$include->('header.plhtml')
+	<p>Page body</p>
+	@$include->('footer.plhtml')
+
+You may have noticed that our Perl code can be delimited in multiple ways.
+
+=head3 Perl Expressions
+
+Praiser can automatically output the results of Perl expressions. To do this, you delimit a Perl expression:
+
+	@PerlExpression
+
+The expression automatically ends at the first whitespace or beginning of an HTML tag. So:
+
+	@$x + $y
+
+will display:
+
+	2 + $y
+
+if
+
+	$x = 2
+	$y = 2
+
+If you wrote this, you probably intended to output the result of:
+
+	$x + $y
+
+You can do this by wrapping the entire expression in parentheses:
+
+	@($x + $y)
+
+=head3 Perl Blocks
+
+Praiser can also evaluate entire blocks of Perl code and output HTML that is embedded inside of them.
+
+There are 2 styles of blocks. The first is a normal block:
+
+	@{
+		Perl Statements
+	}
+
+The other style is a special block for common syntactic elements. Here is an if-statement:
+
+	@if ($x > 5) {
+		<p>$x is greater than 5!</p>
+	} @else {
+		<p>$x is less than or equal to 5!</p>
+	}
+
+The supported special blocks are:
+
+	@while () { }
+
+	@for [optional binding] () { }
+
+	@sub [optional name] { }
+
+	@if () { }
+
+	@elsif () { }
+
+	@else () { }
+
+The special blocks are provided to reduce the verbosity of templates.
+
+=head2 Methods
+
+
 =head1 CAVEATS
 
 This is not actually parsing Perl or HTML. It detects whether tokens coming up belong to Perl (delimited by @)
