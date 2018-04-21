@@ -1,0 +1,22 @@
+@{
+use feature qw(switch);
+no warnings "experimental";
+my $i = $args->{times};
+}
+@while ($i--) {
+	<h1>@$args->{test}</h1>
+	<p>@$include->('test2.plhtml')</p>
+}
+
+@if ($i > 0) {
+	<h1>I is true</h1>
+} @else {
+	<h1>Nope{}</h1>
+}
+
+@for ($i) {
+	when (1) { <h1>Hello</h1> }
+	default {<h1>No</h1>}
+}
+
+

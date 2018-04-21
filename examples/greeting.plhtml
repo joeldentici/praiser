@@ -1,0 +1,10 @@
+@{
+	use POSIX qw(strftime);
+	my $date = strftime "%m/%d/%Y", localtime;
+}
+
+@{ my $greeting = "Welcome to Praiser!"; }
+@{
+	my $message = $greeting . ' ' . "Today is $date";
+}
+<p>@$message</p>

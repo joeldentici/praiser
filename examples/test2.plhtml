@@ -1,0 +1,19 @@
+@{
+use Net::Ping;
+
+my $name = $args->{name};
+
+my $host = $args->{host};
+
+my $p = Net::Ping->new('syn');
+
+my $alive = $p->ping($host) ? 'alive' : 'dead';
+
+$p->close();
+
+
+}
+Hello, @(ucfirst($args->{name}))<br>
+Hello, @ucfirst($name) - @uc($name)<br>
+
+Did you know that @$host is @($alive)?
