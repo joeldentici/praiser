@@ -120,7 +120,7 @@ shows a greeting message with the current date:
 
 When Praiser processes this template, it produces:
 
-	<p>Welcome to Praiser! Today is [MM/DD/YY]<p>
+	<p>Welcome to Praiser! Today is [MM/DD/YY]</p>
 
 You can also pass arguments to templates. Here is how you use arguments:
 
@@ -196,7 +196,7 @@ The supported special blocks are:
 
 	@elsif () { }
 
-	@else () { }
+	@else { }
 
 The special blocks are provided to reduce the verbosity of templates.
 
