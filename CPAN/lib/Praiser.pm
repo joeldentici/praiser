@@ -36,9 +36,11 @@ sub toSub {
 	my $templateProcessor = $self->resolve($templateName);
 
 	my $include = sub {
-		my ($template) = @_;
+		my ($template, $newargs) = @_;
 
-		$self->toSub($template, $output, $args);
+		$newargs = $newargs || $args;
+
+		$self->toSub($template, $output, $newargs);
 
 		return ''; #might be called in expression context
 	};
@@ -90,14 +92,6 @@ Praiser - Praiser template engine for Perl
 	});
 
 	$praiser->toSub('template.plhtml', sub { print @_ });
-
-	$praiser->toSub('template.plhtml', sub { print @_ }, {arg1 => 'val'});
-
-	my $buffer;
-	$praiser->toBuffer('template.plhtml', \$buffer, {arg1 => 'val'});
-
-	my $writer; # some object with write($x : string) : () method
-	$praiser->toBuffer('template.plhtml', $writer, {arg1 => 'val'});
 
 =head1 DESCRIPTION
 
@@ -208,6 +202,60 @@ The special blocks are provided to reduce the verbosity of templates.
 
 =head2 Methods
 
+To use Praiser you must first construct a Praiser engine:
+
+	use Praiser;
+	my $praiser = Praiser->new({
+		directory => '/path/to/templates'
+	});
+
+Next you need to determine how you want to output your processed templates. There are 3 ways to do this.
+
+=head3 Buffer
+
+You can have Praiser write directly to a scalar. This is probably the most Perlish way to do this.
+
+	my $buffer;
+	$praiser->toBuffer('template.plhtml', \$buffer);
+
+=head3 Writer
+
+Praiser can write using an object supporting the "Writer" interface. This is simply an object with
+a write method:
+
+	$obj->write($value : string) : ()
+
+To do this:
+
+	my $writer = My::Writer->new;
+	$praiser->toWriter('template.plhtml', $writer);
+
+=head3 Subroutine
+
+The quickest and dirtiest way to use Praiser is to pass it a subroutine. Internally this is how Praiser
+exposes itself to the compiled templates:
+
+	$praiser->toSub('template.plhtml', sub { print @_ });
+
+=head3 Arguments
+
+Your Praiser templates take 3 parameters in their compile form:
+
+	$output # The subroutine that outputs HTML/text
+	$include # The subroutine that allows including another template
+	$args # A reference or scalar you pass to Praiser
+
+The last parameter is controlled by you. You can pass any scalar or reference value
+as the last argument to the Praiser methods above. Praiser will pass it to your templates
+in their $args parameter. Typically you will want to pass a hashref.
+
+If you include any templates inside a template, those templates will be passed the same $args
+parameter. You can also pass new $args with include:
+
+	@$include->('template.plhtml', {x => 5})
+
+In this case, the included template will receive the arguments you pass to it instead of the
+arguments ot the template it was included from.
 
 =head1 CAVEATS
 
