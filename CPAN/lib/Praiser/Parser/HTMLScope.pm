@@ -18,6 +18,7 @@ sub processToken {
 	my ($self, $token) = @_;
 
 	if ($token eq '@' && $self->{parser}->lookahead eq '@') {
+		$self->{parser}->nextToken;
 		$self->addOutput('@');
 	}
 	elsif ($token eq '@' && $self->seeBlock) {
